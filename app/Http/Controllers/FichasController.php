@@ -3,31 +3,52 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Ficha;
+use Yajra\DataTables\Facades\DataTables;
 
 class FichasController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+            if ($request->ajax()) {
+                return DataTables::of(Ficha::query())->make(true);
+            }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+            return response()->json(['message' => 'Método no permitido'], 405);
+        }
+
+
     public function store(Request $request)
     {
-        //
+          // Validar los datos del formulario
+          $request->validate([
+            'nombres' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            'telefono' => 'required|string|max:20',
+            'correo' => 'required|email|max:255',
+            'urgencia' => 'required|string|max:255',
+        ]);
+
+        // Crear una nueva ficha
+        $ficha = Ficha::create([
+            'nombres' => $request->nombres,
+            'direccion' => $request->direccion,
+            'telefono' => $request->telefono,
+            'correo' => $request->correo,
+            'urgencia' => $request->urgencia,
+        ]);
+
+        $data = DataTables::of(Ficha::query())->make(true);
+        return DataTables::of(Ficha::query())->make(true);
+      /*   return response()->json([
+            'message' => 'Ficha creada exitosamente',
+            'ficha' => $ficha,
+            'data' =>  $data
+        ], 201); */
     }
 
     /**

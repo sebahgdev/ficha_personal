@@ -1,13 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';  // Usamos 'react-dom/client' para React 18+
+import ReactDOM from 'react-dom/client';
+import Loyout from './components/Layout';  // Importamos el formulario correctamente
 
-import Formulario from './Formulario';  // Importa el componente
+const root = ReactDOM.createRoot(document.getElementById('app'));
 
-import './bootstrap';  // Si usas Bootstrap, mantenlo aquí
-
-const root = ReactDOM.createRoot(
-  document.getElementById('app')  // 'app' es el id del contenedor en tu HTML
+// Renderiza el formulario en el contenedor con id="app"
+root.render(
+  <React.StrictMode>
+    <Loyout />
+  </React.StrictMode>
 );
-
-// Renderizamos el componente FichaFormulario
-root.render(<Formulario />);

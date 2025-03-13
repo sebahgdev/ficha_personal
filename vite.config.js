@@ -10,4 +10,6 @@ export default defineConfig({
       refresh: true,
     }),
   ],
+  minify: true,
+    sourcemap: true,
 });
