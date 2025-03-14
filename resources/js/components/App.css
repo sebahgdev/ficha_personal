@@ -1,0 +1,6 @@
+/* App.css o el archivo de estilos correspondiente */
+.header-column {
+    background-color: #3DB2A0; /* Aquí puedes poner el color que desees */
+    color: white;              /* Cambiar el color del texto */
+    font-weight: bold;         /* Hacer el texto en negrita */
+}

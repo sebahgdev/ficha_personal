@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-
-const Formulario = ({ refreshData }) => {
+import React, { useState,useRef } from "react";
+import { Toast } from 'primereact/toast';
+const Formulario = ({ refreshData,hideModal  }) => {
     const [formData, setFormData] = useState({
         nombres: "",
         direccion: "",
@@ -9,7 +9,12 @@ const Formulario = ({ refreshData }) => {
         urgencia: "",
     });
     const [loading, setLoading] = useState(false);
+    const toast = useRef(null);
     const [suggestions, setSuggestions] = useState([]);
+
+    const showToast = (severityValue, summaryValue, detailValue) => {
+        toast.current.show({severity: severityValue, summary: summaryValue, detail: detailValue});
+      }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -76,9 +81,16 @@ const Formulario = ({ refreshData }) => {
             console.log(result.data)
             if (result.data && Array.isArray(result.data)) {
                 console.log('entro');
-                refreshData(result.data); // Asegúrate de que data es un arreglo
+                refreshData([]); // Asegúrate de que data es un arreglo
+                refreshData(result.data);
             }
         }
+        toast.current.show({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Ficha creada con éxito!',
+            life: 3000, // El mensaje se mostrará durante 3 segundos
+        });
             setFormData({
                 nombres: "",
                 direccion: "",
@@ -86,18 +98,23 @@ const Formulario = ({ refreshData }) => {
                 correo: "",
                 urgencia: "",
             });
+            hideModal();
+
         } catch (error) {
+            toast.current.show({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Hubo un problema al crear la ficha.',
+                life: 3000, // El mensaje se mostrará durante 3 segundos
+            });
             console.error("Error al crear la ficha:", error);
         }
     };
 
     return (
-        <div className="container pt-5">
-            <div className="card">
-                <div className="card-header">
-                    <h2>Ingreso</h2>
-                </div>
-                <div className="card-body">
+        <div className="container-flud">
+             <Toast ref={toast} />
+
                     <form onSubmit={handleSubmit}>
                         <div className="row">
                             <div className="col-md-6">
@@ -110,7 +127,7 @@ const Formulario = ({ refreshData }) => {
                                     value={formData.nombres}
                                     onChange={handleChange}
                                 />
-                            </div>
+                                                           </div>
 
                             <div className="col-md-6" style={{ position: 'relative' }}>
     <label htmlFor="direccion" className="form-label">Dirección Particular</label>
@@ -188,9 +205,10 @@ const Formulario = ({ refreshData }) => {
                             </div>
                         </div>
                     </form>
+
                 </div>
-            </div>
-        </div>
+
+
     );
 };
 

@@ -14,11 +14,13 @@ class FichasController extends Controller
     public function index(Request $request)
     {
 
-            if ($request->ajax()) {
+        /*     if ($request->ajax()) {
                 return DataTables::of(Ficha::query())->make(true);
             }
 
-            return response()->json(['message' => 'Método no permitido'], 405);
+            return response()->json(['message' => 'Método no permitido'], 405); */
+            $fichas = Ficha::select('id', 'nombres', 'direccion', 'telefono','correo','urgencia')->get();
+            return response()->json($fichas);
         }
 
 
